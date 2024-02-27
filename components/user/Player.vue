@@ -5,7 +5,8 @@
       {{ playingSongName }}
     </div>
     <div @click="togglePlayback" class="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer">
-      <!-- Play/Pause Icons -->
+      <Icon v-if="playing" name="ic:baseline-pause" size="20px" color="black"/>
+      <Icon v-else name="material-symbols-light:play-arrow" size="50px" color="black" />
     </div>
     </div>
     

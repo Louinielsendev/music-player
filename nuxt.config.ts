@@ -11,5 +11,10 @@ export default defineNuxtConfig({
 supabase:{
   redirect: false
 },
-  modules: ["@nuxt/image", "@nuxtjs/supabase"]
+  modules: ["@nuxt/image", "@nuxtjs/supabase", 'nuxt-icon', ['@pinia/nuxt', {
+    autoImports: ['defineStore', 'acceptHMRUpdate']
+  }]],
+  imports: {
+    dirs: ['stores']
+  }
 })
