@@ -4,7 +4,7 @@ export default eventHandler(async event => {
   const client = await serverSupabaseClient(event)
 
   let albums = []
-  const { data: albumsData } = await client.from('albums').select('*')
+  const { data: albumsData } = await client.from('albums').select('*').order('created_at', {ascending: false})
   
   albums = await Promise.all(albumsData.map(async (alb) => {
     let album = {

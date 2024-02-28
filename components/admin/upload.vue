@@ -26,12 +26,12 @@
       />
       <br />
       <label for="cover">Album Cover</label>
-      <input type="file" name="cover" @change="handleFileUpload" />
+      <input  class="bg-neutral-700 rounded p-1 w-full outline-none" type="file" name="cover" @change="handleFileUpload" />
       <div v-if="errorMessage" class="text-red-500">
         {{ errorMessage }}
       </div>
-      <div @click="addSong" class="cursor-pointer pt-3">Add Song</div>
-      <br />
+      <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+      
       <div class="w-full overflow-hidden">
         <adminUploadSong
           v-for="(song, index) in songs"
@@ -42,7 +42,7 @@
           @delete-song="deleteSong"
         />
       </div>
-
+      <div @click="addSong" class="cursor-pointer pt-3">Add Song</div>
       <button>Upload</button>
     </form>
   </div>
