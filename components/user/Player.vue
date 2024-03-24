@@ -56,7 +56,6 @@ watch(playing, newVal => {
 })
 
 const loadSong = async () => {
-  console.log(playerStore.playingSong)
   if (playerStore.playingSong.path) {
     const { data: songData } = await supabaseClient.storage
       .from('songs')

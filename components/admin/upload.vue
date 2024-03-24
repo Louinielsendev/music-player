@@ -116,7 +116,7 @@ const upload = async () => {
     if (!validate()) {
       return
     }
-    console.log('valid')
+    
     var id = Math.random().toString(16).slice(2)
 
     // Upload album
@@ -128,7 +128,6 @@ const upload = async () => {
       })
     if (imageError) {
       isLoading.value = false
-      console.log(imageError)
       return
     }
 
@@ -146,7 +145,6 @@ const upload = async () => {
 
     if (supabaseError) {
       isLoading.value = false
-      console.log(supabaseError)
       return
     }
 
@@ -164,7 +162,6 @@ const upload = async () => {
         })
       if (songError) {
         isLoading.value = false
-        console.log(songError)
         return
       }
 
@@ -178,14 +175,12 @@ const upload = async () => {
 
       if (supabaseError) {
         isLoading.value = false
-        console.log(supabaseError)
         return
       }
     })
   } catch {
   } finally {
     isLoading.value = false
-    console.log('succes')
   }
 }
 

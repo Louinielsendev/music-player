@@ -40,7 +40,6 @@
     .download(`${props.song.file_url}`)
 
   if (error) {
-    console.error("Download error:", error)
     return
   }
 
