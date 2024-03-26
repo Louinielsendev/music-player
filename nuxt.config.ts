@@ -13,7 +13,7 @@ supabase:{
 },
   modules: ["@nuxt/image", "@nuxtjs/supabase", 'nuxt-icon', ['@pinia/nuxt', {
     autoImports: ['defineStore', 'acceptHMRUpdate']
-  }]],
+  }], '@nuxt/ui'],
   imports: {
     dirs: ['stores']
   }

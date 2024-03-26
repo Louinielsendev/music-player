@@ -3,15 +3,15 @@
     v-if="playerStore.playingSong.path"
     class="fixed bottom-0 bg-black w-full py-2 h-[80px] px-4"
   >
-    <div class="grid grid-cols-2 h-full items-center">
+    <div class="grid grid-cols-2 h-full items-center md:grid-cols-3">
       <div>
         {{ playerStore.playingSong.name }}
       </div>
-      <div class="flex justify-end md:justify-start items-center">
+      <div class="flex justify-end md:justify-center gap-4 items-center">
         <div @click="prevSong" class="cursor-pointer"><Icon name="material-symbols:skip-previous" size="30px" color="white"/></div>
         <div
           @click="togglePlayback"
-          class="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+          class="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer hover:scale-105"
         >
           <Icon
             v-if="playerStore.playing"
@@ -70,7 +70,7 @@ const loadSong = async () => {
     audio.value.onended = () => {
       nextSong()
     }
-    
+
     if (playerStore.playing) {
       audio.value.play()
     }

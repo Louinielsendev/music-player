@@ -1,68 +1,53 @@
 import { defineStore } from 'pinia'
 
+interface Song {
+  file_url: string
+  title: string
+}
+
 export const usePlayerStore = defineStore({
-    id: 'player-store',
-    state:() => {
-        return {
-            playingSong: {
-                path: '',
-                name: ''
-            },
-            playing: false,
-            songs: []
-        }
+  id: 'player-store',
+  state: () => ({
+    playingSong: {
+      path: '',
+      name: ''
     },
-
-    actions: {
-        changePlayingSong(path: string, name: string){
-            this.playingSong.path = path
-            this.playingSong.name = name
-            this.playing = true
-        },
-        togglePlay(){
-            this.playing = !this.playing
-        },
-        
-        addSongToSongs(song: Object){
-            this.songs.push(song)
-        },
-        nextSong(){
-            const index = this.currentSongIndex
-            let nextSong
-            if(index < this.songs.length){
-                nextSong = this.songs[index + 1]
-            } else {
-                nextSong = this.songs[0]
-               console.log(nextSong)
-            }
-            console.log(nextSong)
-            this.playingSong.path = nextSong.file_url
-            this.playingSong.name = nextSong.title
-        },
-        prevSong(){
-            
-            const index = this.currentSongIndex
-            let nextSong
-            if(index > 0){
-                nextSong = this.songs[index - 1]
-            } else {
-                nextSong = this.songs[this.songs.length -1]
-                
-            }
-            this.playingSong.path = nextSong.file_url
-            this.playingSong.name = nextSong.title
-        },
-       
+    playing: false,
+    songs: [] as Song[]
+  }),
+  actions: {
+    changePlayingSong (path: string, name: string) {
+      this.playingSong.path = path
+      this.playingSong.name = name
+      this.playing = true
     },
-
-    getters: {
-        isPlaying(){
-            return this.playing
-        },
-        currentSongIndex() {
-            const currentSongPath = this.playingSong.path
-            return this.songs.findIndex(song => song.file_url === currentSongPath)
-        }
-
+    togglePlay () {
+      this.playing = !this.playing
+    },
+    addSongToSongs (song: Song) {
+      this.songs.push(song)
+    },
+    nextSong () {
+      const index = this.currentSongIndex
+      const nextSong = this.songs[index + 1] || this.songs[0]
+      this.playingSong.path = nextSong.file_url
+      this.playingSong.name = nextSong.title
+    },
+    prevSong () {
+      const index = this.currentSongIndex
+      const nextSong =
+        index > 0 ? this.songs[index - 1] : this.songs[this.songs.length - 1]
+      this.playingSong.path = nextSong.file_url
+      this.playingSong.name = nextSong.title
     }
+  },
+  getters: {
+    isPlaying (): boolean {
+      return this.playing
+    },
+    currentSongIndex (): number {
+      const currentSongPath = this.playingSong.path
+      return this.songs.findIndex(song => song.file_url === currentSongPath)
+    }
+  }
 })

@@ -27,9 +27,7 @@
       <br />
       <label for="cover">Album Cover</label>
       <input  class="bg-neutral-700 rounded p-1 w-full outline-none" type="file" name="cover" @change="handleFileUpload" />
-      <div v-if="errorMessage" class="text-red-500">
-        {{ errorMessage }}
-      </div>
+     
       <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
       
       <div class="w-full overflow-hidden">
@@ -42,8 +40,17 @@
           @delete-song="deleteSong"
         />
       </div>
-      <div @click="addSong" class="cursor-pointer pt-3">Add Song</div>
-      <button>Upload</button>
+      <div @click="addSong" class="cursor-pointer pt-3 mb-2">Add Song</div>
+      <button class="mb-2">Upload</button>
+      <div v-if="errorMessage" class="text-red-500">
+        {{ errorMessage }}
+      </div>
+      <div v-if="isLoading">
+        Loading...
+      </div>
+      <div v-if="uploadSuccess">
+        Upload success!
+      </div>
     </form>
   </div>
 </template>
@@ -58,17 +65,21 @@ const file = ref()
 const imageLoaded = ref(false)
 const resetKey = ref(0)
 const isLoading = ref(false)
+const uploadSuccess = ref(false)
 const supabaseClient = useSupabaseClient()
 
 const validate = () => {
   let valid = true
-
+  
   if (valid) {
     valid = validateTitle()
   }
-
   if (valid) {
     valid = validateName()
+  }
+
+  if (valid){
+    valid = validateYear()
   }
 
   if (valid) {
@@ -83,40 +94,69 @@ const validate = () => {
 }
 
 const validateTitle = () => {
-  return albumTitle.value
+  if(!albumTitle.value){
+    errorMessage.value = 'No title'
+  } else {
+    errorMessage.value = null
+  }
+  return !errorMessage.value
 }
 
 const validateName = () => {
-  return artistName.value
+  if(!artistName.value){
+    errorMessage.value = 'No artist name'
+  } else {
+    errorMessage.value = null
+  }
+  return !errorMessage.value
+}
+
+const validateYear = () => {
+  if(!releaseYear.value){
+    errorMessage.value = 'No release year'
+  } else {
+    errorMessage.value = null
+  }
+
+  return !errorMessage.value
 }
 
 const validateImage = () => {
-  return imageLoaded.value
+  if(!imageLoaded.value){
+    errorMessage.value = 'No album cover'
+  } else {
+    errorMessage.value = null
+  }
+
+  return !errorMessage.value
 }
 
 const validateSongs = () => {
-  let valid = true
   if (songs.value.length < 1) {
-    valid = false
+    errorMessage.value = 'No songs'
   } else {
-    songs.value.forEach(song => {
-      if (!song.title) {
-        valid = false
-      } else if (!song.audio) {
-        valid = false
-      }
-    })
+    errorMessage.value = null
   }
-  return valid
+
+  songs.value.forEach(song => {
+    if (!song.title) {
+        errorMessage.value = 'Song missing title'
+    } else if (!song.audio) {
+        errorMessage.value = 'Song missing audio'
+    } 
+  })
+  
+  return !errorMessage.value
 }
 
 const upload = async () => {
-  try {
-    isLoading.value = true
+  isLoading.value = true
     if (!validate()) {
+      isLoading.value = false
       return
     }
-    console.log('valid')
+  try {
+    
     var id = Math.random().toString(16).slice(2)
 
     // Upload album
@@ -128,7 +168,7 @@ const upload = async () => {
       })
     if (imageError) {
       isLoading.value = false
-      console.log(imageError)
+      errorMessage.value = imageError
       return
     }
 
@@ -146,7 +186,7 @@ const upload = async () => {
 
     if (supabaseError) {
       isLoading.value = false
-      console.log(supabaseError)
+      errorMessage.value = supabaseError
       return
     }
 
@@ -164,7 +204,7 @@ const upload = async () => {
         })
       if (songError) {
         isLoading.value = false
-        console.log(songError)
+        errorMessage.value = songError
         return
       }
 
@@ -178,14 +218,14 @@ const upload = async () => {
 
       if (supabaseError) {
         isLoading.value = false
-        console.log(supabaseError)
+        errorMessage.value = supabaseError
         return
       }
     })
   } catch {
   } finally {
     isLoading.value = false
-    console.log('succes')
+    uploadSuccess.value = true
   }
 }
 
